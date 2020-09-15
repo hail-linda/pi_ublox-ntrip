@@ -165,18 +165,27 @@ void NtripClient::TheradHandler(void) {
   char recv_buffer[1024] = {};
   auto start_tp = std::chrono::steady_clock::now();
   int intv_ms = report_interval_ * 1000;
+ 
   while (service_is_running_) {
+
     ret = recv(socket_fd_, recv_buffer, sizeof(recv_buffer), 0);
     if(ret > 0){
       printf("ret:  %d\n",ret);
+           if (gga_buffer_.empty()) {
+      GetGGAFrameData(latitude_, longitude_, 10.0, &gga_buffer_);
+    }
     time_t myt=time(NULL);
+    if(myt%16==0){
+    ret = send(socket_fd_, gga_buffer_.c_str(), gga_buffer_.size(), 0);
+    printf("sendRet:  %s \n\n ret: %d",gga_buffer_.c_str(),ret);
+  }
     char mytime[300] = {0};
     sprintf(mytime,"%li",myt);
     FILE *nema ;
     strcat(mytime,".nema");
     nema = fopen(mytime,"wb");
     printf("fileName:  %s\n",mytime);
-    fwrite(recv_buffer,sizeof(recv_buffer),1,nema);
+    fwrite(recv_buffer,ret,1,nema);
     fclose(nema);
   }
     if (ret == 0) {

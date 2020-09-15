@@ -30,7 +30,7 @@ std::string ip = "203.107.45.154";
 int port = 8003;
 std::string user = "qxuesg00751";
 std::string passwd = "20304f5";
-std::string mountpoint = "RTCM30_GG";
+std::string mountpoint = "AUTO";
 
   NtripClient ntrip_client;
   ntrip_client.Init(ip, port, user, passwd, mountpoint);
@@ -47,7 +47,7 @@ std::string mountpoint = "RTCM30_GG";
   //   ntrip_client.set_gga_buffer(gga);
   // }
   //ntrip_client.set_location(22.57311, 113.94905);
-  ntrip_client.set_location(45.72643,126.62586);
+  ntrip_client.set_location(45.43593,126.75558);
   ntrip_client.set_report_interval(10);
   ntrip_client.Run();
   // Exit the program after 10 seconds.
