@@ -15,7 +15,20 @@ def hexshow(data):
         hhex = '%02x' % hvol
         hex_data += hhex+' '
 
-    print 'hexshow:', hex_data 
+    print 'hexshow:', hex_data
+    
+def sendFile(file):
+    with open(files, "rb") as f:
+        NEMA = f.read()+"\r\n"
+        #print(NEMA)
+                
+        lenBuffer = ser.inWaiting()
+        dataRead = ser.read(lenBuffer)
+        #print(dataRead)
+        dataSend = ser.write(NEMA)
+        print(files)
+        print(hexshow(NEMA))
+        #hexshow(count)
 
 # 加载串口端口信息
 ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=0.5)    # 57600为了和仪器的波特率匹配
@@ -24,22 +37,22 @@ ser.flushInput()                                            # 将serial上的接
 
 while (True):
     path = sys.path[0]
+    earlyTimeStamp = 999999999999999999;
+    numOfFile = 0
+    fileList=[]
     for files in os.listdir(path): 
         if(files[-5:]==".nema"):
-            with open(files, "rb") as f:
-                NEMA = f.read()+"\r\n"
-                print(NEMA)
-                
-                lenBuffer = ser.inWaiting()
-                dataRead = ser.read(lenBuffer)
-                print(dataRead)
-                dataSend = ser.write(NEMA)
-                #print(files)
-                print(hexshow(NEMA))
-                #hexshow(count)
-
-            os.remove(files)
-    time.sleep(0.2)     # 程序暂停5秒，等待缓存内存入数据。
+            fileList.append(files[:-5])
+    fileList.sort()
+    #print(fileList)
+    
+    if(len(fileList) >= 2):
+        files = fileList[0]+".nema"
+        sendFile(files)
+        #print(files) 
+        os.remove(files)
+    if(len(fileList) <= 2):
+        time.sleep(0.8)     # 程序
     '''
 for files in os.listdir(path): 
     if(files[-5:]==".nema"):
