@@ -190,6 +190,7 @@ void NtripClient::TheradHandler(void) {
   }
     if (ret == 0) {
       printf("Remote socket close!!!\n");
+      exit(0);
       break;
     } else if (ret < 0) {
       if ((errno == EAGAIN) || (errno == EWOULDBLOCK) || (errno == EINTR)) {
@@ -197,6 +198,7 @@ void NtripClient::TheradHandler(void) {
         continue;
       } else {
         printf("Remote socket error!!!\n");
+        exit(0);
         break;
       }
     } else {

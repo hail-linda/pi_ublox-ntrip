@@ -28,8 +28,8 @@ using libntrip::NtripClient;
 int main(void) {
 std::string ip = "203.107.45.154";
 int port = 8003;
-std::string user = "qxuesg00802";
-std::string passwd = "6f33b6b";
+std::string user = "qxuesg00800";
+std::string passwd = "73c7e8f";
 std::string mountpoint = "AUTO";
 
   NtripClient ntrip_client;

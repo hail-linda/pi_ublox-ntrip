@@ -14,6 +14,8 @@ def hexshow(data):
         hvol = ord(data[i])
         hhex = '%02x' % hvol
         hex_data += hhex+' '
+        if('%02x' % ord(data[i])=="3e" and ('%02x' % ord(data[i+1]))[0]=="d"):
+            hex_data += "----1005----"
 
     print 'hexshow:', hex_data
     
@@ -37,7 +39,7 @@ ser.flushInput()                                            # 将serial上的接
 
 while (True):
     path = sys.path[0]
-    earlyTimeStamp = 999999999999999999;
+    path = "/home/pi"
     numOfFile = 0
     fileList=[]
     for files in os.listdir(path): 
@@ -48,10 +50,11 @@ while (True):
     
     if(len(fileList) >= 2):
         files = fileList[0]+".nema"
+        files = "/home/pi/"+files
         sendFile(files)
         #print(files) 
         os.remove(files)
-    if(len(fileList) <= 2):
+    if(len(fileList) < 2):
         time.sleep(0.8)     # 程序
     '''
 for files in os.listdir(path): 
