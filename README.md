@@ -10,7 +10,7 @@ https://github.com/hanoi404/ntrip
 ## 结构与工作流程
 
 1. 使用**ntrip_client**向千寻ntrip要求RTCM数据并保存至文件 **\[timestamp\].nema** 
-2. 使用**sendNema.py**读取**\[timestamp\].nema** 并从串口发送至 ublox
+2. 使用**sendNema.py**读取 **\[timestamp\].nema** 并从串口发送至 ublox
 3. 使用**ntripinit.sh**和**crontab**对**ntrip_client**与**sendNema.py**做进程保活
 
 ## Quick start
@@ -41,10 +41,18 @@ vim ntrip_client.cc
 3. 添加定时任务
 ```
 sudo vim /etc/crontab
-未完待续。。。
+在文档末添加
+
+*/2 *   * * *   pi  pkill py
+* *     * * *   pi  bash [pi_ublox-ntrip]/ntripinit.sh > [pi_ublox-ntrip]/log 
 ```
 
-4. make
+4. make & reboot
 ```
 make all
+sudo shutdwon -r now
 ```
+
+## TODO
+- NTRIP账号外部输入
+- GPGAA生成与注入
