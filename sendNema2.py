@@ -62,9 +62,12 @@ def sendR1005():
 
 
 # 加载串口端口信息
-ser = serial.Serial("/dev/ttyUSB0", 115200
-                    
-                    )    # 57600为了和仪器的波特率匹配
+try:
+    ser = serial.Serial("/dev/ttyUSB0", 115200)
+    print("use usb0")
+except:
+    ser = serial.Serial("/dev/ttyUSB4", 115200)
+    print("use usb4")
 ser.flushInput()                                            # 将serial上的接收数据全部清除
 
 
