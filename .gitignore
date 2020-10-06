@@ -50,3 +50,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+ntrip_caster
+ntrip_client
+ntrip_server
+

@@ -34,7 +34,10 @@
 #include <vector>
 
 #include "ntrip_util.h"
+#include <iostream>
+#include <fstream>
 
+using namespace std;
 
 namespace libntrip {
 
@@ -118,7 +121,7 @@ bool NtripClient::Run(void) {
       // printf("Send gpgga data ok\n");
       break;
     } else if (ret == 0) {
-      printf("Remote socket close!!!\n");
+      printf("Remote socket close when send gga 1!!!\n");
       close(socket_fd);
       return false;
     }
@@ -171,25 +174,33 @@ void NtripClient::TheradHandler(void) {
     ret = recv(socket_fd_, recv_buffer, sizeof(recv_buffer), 0);
     if(ret > 0){
       printf("ret:  %d\n",ret);
-           if (gga_buffer_.empty()) {
+    if (gga_buffer_.empty()) {
       GetGGAFrameData(latitude_, longitude_, 10.0, &gga_buffer_);
     }
     time_t myt=time(NULL);
-    if(myt%16==0){
-    ret = send(socket_fd_, gga_buffer_.c_str(), gga_buffer_.size(), 0);
-    printf("sendRet:  %s \n\n ret: %d",gga_buffer_.c_str(),ret);
-  }
+    char ggaBuffer[100]={0};
     char mytime[300] = {0};
+    
     sprintf(mytime,"%li",myt);
+    
+    if(myt%10==0){
+      std::ifstream GNGGA("GNGGA",ios::in);
+      GNGGA.getline(ggaBuffer,100);
+      GNGGA.close();
+      ret = send(socket_fd_, ggaBuffer, 100, 0);
+      printf("sendRet:  %s \n\n ret: %d",ggaBuffer,ret);
+  }
+
     FILE *nema ;
     strcat(mytime,".nema");
     nema = fopen(mytime,"wb");
+    printf("\n%li\n",myt);
     printf("fileName:  %s\n",mytime);
     fwrite(recv_buffer,ret,1,nema);
     fclose(nema);
   }
     if (ret == 0) {
-      printf("Remote socket close!!!\n");
+      printf("Remote socket close when send gga 2!!!\n");
       exit(0);
       break;
     } else if (ret < 0) {
